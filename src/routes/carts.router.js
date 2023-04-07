@@ -6,8 +6,6 @@ const cartRouter = Router();
 const cartManager = new CartManager();
 const productManager = new ProductManager();
 
-cartRouter.use(json());
-
 cartRouter.post("/", async (req, res) => {
   try {
     const carts = await cartManager.getCarts();

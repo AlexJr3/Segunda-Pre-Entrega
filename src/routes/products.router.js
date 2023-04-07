@@ -2,6 +2,7 @@ import { Router, json } from "express";
 import { ProductManager } from "../dao/index.js";
 
 const router = new Router();
+router.use(json());
 const productManager = new ProductManager();
 
 router.get("/", async (req, res) => {

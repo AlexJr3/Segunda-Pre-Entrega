@@ -6,7 +6,6 @@ class productManager {
   }
 
   getProducts = async (queryLimit, queryPage, querySort, query) => {
-    let products;
     const getLimit = queryLimit ? queryLimit : 10;
     const getPage = queryPage ? queryPage : 1;
     const getSort = querySort ? { price: querySort } : false;
@@ -18,11 +17,7 @@ class productManager {
     };
 
     try {
-      if (!query) {
-        products = await productModel.paginate({}, options);
-      } else {
-        products = await productModel.paginate({ ...query }, options);
-      }
+      const products = await productModel.paginate({ ...query }, options);
       return products;
     } catch (err) {
       throw new Error({ err });

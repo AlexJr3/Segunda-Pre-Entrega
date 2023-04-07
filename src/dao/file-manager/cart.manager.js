@@ -1,11 +1,12 @@
 import fs from "fs";
-import __dirname, { getNextId } from "./utils.js";
+import __dirname from "../../utils.js";
+import { getNextId } from "./utils.js";
 
 const path = __dirname + "/dao/file-manager/file/Cart.json";
 
 class CartManager {
   constructor() {
-    console.log("Working with courses with FileSystem");
+    console.log("Working with carts with FileSystem");
   }
 
   getCarts = async () => {
