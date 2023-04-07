@@ -6,17 +6,12 @@ const productManager = new ProductManager();
 
 router.get("/", async (req, res) => {
   try {
-    const products = await productManager.getProducts();
-    const { limit } = req.query;
+    const { limit, page, sort, query } = req.query;
+    const products = await productManager.getProducts(limit, page, sort, query);
 
-    if (!limit) {
-      res.status(200).send({ status: "ok", payload: products });
-      return;
-    }
-    const productLimit = await products.slice(0, limit);
-    res.status(200).send({ status: "ok", payload: productLimit });
-  } catch (err) {
-    res.status(404).send({ status: "error", payload: err.message });
+    res.status(200).send({ status: "ok", payload: products });
+  } catch (error) {
+    res.status(400).send({ status: "error", payload: error.message });
   }
 });
 

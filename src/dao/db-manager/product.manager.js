@@ -5,10 +5,28 @@ class productManager {
     console.log("Working with products with DataBase");
   }
 
-  getProducts = async () => {
-    const products = await productModel.find().lean();
+  getProducts = async (queryLimit, queryPage, querySort, query) => {
+    let products;
+    const getLimit = queryLimit ? queryLimit : 10;
+    const getPage = queryPage ? queryPage : 1;
+    const getSort = querySort ? { price: querySort } : false;
 
-    return products;
+    const options = {
+      page: getPage,
+      limit: getLimit,
+      sort: getSort,
+    };
+
+    try {
+      if (!query) {
+        products = await productModel.paginate({}, options);
+      } else {
+        products = await productModel.paginate({ ...query }, options);
+      }
+      return products;
+    } catch (err) {
+      throw new Error({ err });
+    }
   };
 
   addProduct = async (product) => {
