@@ -22,10 +22,14 @@ app.set("views", __dirname + "/../views");
 
 //mongooseConnect
 
-mongoose.connect(
-  "mongodb+srv://alexisjrbwork:blTyiBGV3yxMhFcb@codercluster.7y4c97s.mongodb.net/Segunda-Pre-Entrega?retryWrites=true&w=majority"
-);
+mongoose
+  .connect(
+    "mongodb+srv://alexisjrbwork:blTyiBGV3yxMhFcb@codercluster.7y4c97s.mongodb.net/Segunda-Pre-Entrega?retryWrites=true&w=majority"
+  )
+  .then((conn) => {
+    console.log("Connected to DB");
+  });
 
-app.listen(8008, (req, res) => {
+app.listen(8080, (req, res) => {
   console.log("Server listening on port 8080");
 });

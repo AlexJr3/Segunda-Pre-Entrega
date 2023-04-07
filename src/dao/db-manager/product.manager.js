@@ -5,7 +5,7 @@ class productManager {
     console.log("Working with products with DataBase");
   }
 
-  getProducts = async (queryLimit, queryPage, querySort, query) => {
+  async getProducts(queryLimit, queryPage, querySort, query) {
     const getLimit = queryLimit ? queryLimit : 10;
     const getPage = queryPage ? queryPage : 1;
     const getSort = querySort ? { price: querySort } : false;
@@ -17,38 +17,57 @@ class productManager {
     };
 
     try {
-      const products = await productModel.paginate({ ...query }, options);
+      const products = await productModel.paginate(query, options);
       return products;
     } catch (err) {
       throw new Error({ err });
     }
-  };
+  }
 
-  addProduct = async (product) => {
-    const result = await productModel.create(product);
+  async addProduct(
+    title,
+    description,
+    price,
+    thumbnails,
+    code,
+    stock,
+    status,
+    category
+  ) {
+    const newProduct = {
+      title,
+      description,
+      price,
+      thumbnails,
+      code,
+      stock,
+      status,
+      category,
+    };
+    const result = await productModel.create(newProduct);
 
     return result;
-  };
+  }
 
-  getProductById = async (productId) => {
+  async getProductById(productId) {
     const product = await productModel.findById(productId);
 
     return product;
-  };
+  }
 
-  updateProduct = async (productId, data) => {
+  async updateProduct(productId, data) {
     const product = await productModel.findByIdAndUpdate(productId, data, {
       new: true,
     });
 
-    return product.save();
-  };
+    return product;
+  }
 
-  deleteProduct = async (productId) => {
+  async deleteProduct(productId) {
     const product = await productModel.findByIdAndDelete(productId);
 
-    return product.save();
-  };
+    return product;
+  }
 }
 
 export default productManager;

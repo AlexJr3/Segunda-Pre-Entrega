@@ -40,7 +40,7 @@ router.post("/", async (req, res) => {
       category,
     } = req.body;
 
-    const newProduct = await productManager.addProduct({
+    const newProduct = await productManager.addProduct(
       title,
       description,
       price,
@@ -48,8 +48,8 @@ router.post("/", async (req, res) => {
       code,
       stock,
       status,
-      category,
-    });
+      category
+    );
 
     res.status(201).send({ status: "ok", payload: newProduct });
   } catch (err) {
@@ -58,13 +58,14 @@ router.post("/", async (req, res) => {
 
   router.put("/:pid", async (req, res) => {
     try {
-      const { pid } = req.query;
+      const { pid } = req.params;
       const data = req.body;
-      await productManager.updateProduct(pid, ...data);
+      await productManager.updateProduct(pid, data);
 
-      res
-        .status(200)
-        .send({ status: "ok", payload: productManager.getProductById(pid) });
+      res.status(200).send({
+        status: "ok",
+        payload: await productManager.getProductById(pid),
+      });
     } catch (err) {
       res.status(400).send({ status: "error", payload: err.message });
     }
@@ -72,7 +73,7 @@ router.post("/", async (req, res) => {
 
   router.delete("/:pid", async (req, res) => {
     try {
-      const { pid } = req.query;
+      const { pid } = req.params;
       await productManager.deleteProduct(pid);
 
       res.status(202).send({ status: "ok", payload: "Product Deleted" });
