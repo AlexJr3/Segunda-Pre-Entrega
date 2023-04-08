@@ -47,6 +47,25 @@ class CartManager {
 
     return addCart;
   }
+
+  async updateQuantity(cid, pid, quantity) {
+    const product = await cartModel.findOne(cid).populate("products.product");
+
+    const findProduct = await product.findOne(pid);
+
+    findProduct.quantity = quantity;
+
+    return findProduct;
+  }
+
+  async deletedAll(cId) {
+    const deletedProducts = await cartModel.findOneAndDelete(
+      { _id: cId },
+      { $pull: { products: {} } }
+    );
+
+    return deletedProducts;
+  }
 }
 
 export default CartManager;
