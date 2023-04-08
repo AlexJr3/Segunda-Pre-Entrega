@@ -18,7 +18,10 @@ class CartManager {
   }
 
   async getCartById(id) {
-    const cart = await cartModel.findById(id);
+    const cart = await cartModel
+      .findById(id)
+      .populate("products.product")
+      .lean();
 
     return cart;
   }
@@ -26,7 +29,7 @@ class CartManager {
   async addProductToCart(cartId, productId) {
     const cart = await cartModel.findById(cartId);
 
-    cart.products.push({ productId });
+    cart.products.push({ product: productId });
 
     return cart.save();
   }
@@ -49,13 +52,13 @@ class CartManager {
   }
 
   async updateQuantity(cid, pid, quantity) {
-    const product = await cartModel.findOne(cid).populate("products.product");
+    const cart = await cartModel.findById(cid).populate("products.product");
 
-    const findProduct = await product.findOne(pid);
+    const product = cart.porducts.find((p) => p.product === pid);
 
-    findProduct.quantity = quantity;
+    product.quantity = quantity;
 
-    return findProduct;
+    return cart.save();
   }
 
   async deletedAll(cId) {

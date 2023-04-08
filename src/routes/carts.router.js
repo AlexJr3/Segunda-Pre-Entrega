@@ -18,7 +18,7 @@ cartRouter.post("/", async (req, res) => {
 
 cartRouter.get("/:cid", async (req, res) => {
   try {
-    const { cid } = req.query;
+    const { cid } = req.params;
     const cart = await cartManager.getCartById(cid);
 
     res.status(201).send({ status: "ok", payload: cart });
@@ -29,7 +29,7 @@ cartRouter.get("/:cid", async (req, res) => {
 
 cartRouter.post("/:cid/product/:pid", async (req, res) => {
   try {
-    const { cid, pid } = req.query;
+    const { cid, pid } = req.params;
     const product = await productManager.getProductById(pid);
     await cartManager.addProductToCart(cid, product.id);
 
