@@ -8,12 +8,19 @@ const productManager = new ProductManager();
 
 cartRouter.post("/", async (req, res) => {
   try {
-    const carts = await cartManager.getCarts();
+    const { data } = req.body;
+    const carts = await cartManager.addCart(data);
 
     res.status(200).send({ status: "ok", payload: carts });
   } catch (error) {
     res.status(400).send({ status: "error", payload: error.message });
   }
+});
+
+cartRouter.get("/", async (req, res) => {
+  const cart = await cartManager.getCarts();
+
+  res.status(200).send({ status: "ok", payload: cart });
 });
 
 cartRouter.get("/:cid", async (req, res) => {
@@ -27,15 +34,14 @@ cartRouter.get("/:cid", async (req, res) => {
   }
 });
 
-cartRouter.post("/:cid/product/:pid", async (req, res) => {
+cartRouter.post("/:cid/products/:pid", async (req, res) => {
   try {
     const { cid, pid } = req.params;
-    const product = await productManager.getProductById(pid);
-    await cartManager.addProductToCart(cid, product.id);
+    await cartManager.addProductToCart(cid, pid);
 
     res
       .status(200)
-      .send({ status: "ok", payload: cartManager.getCartById(cid) });
+      .send({ status: "ok", payload: await cartManager.getCartById(cid) });
   } catch (err) {
     res.status(400).send({ status: "error", payload: err.message });
   }

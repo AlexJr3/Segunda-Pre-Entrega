@@ -1,0 +1,29 @@
+<div>
+    <h1>products</h1>
+    <ul>
+        {{#each products.docs}}
+            <b>{{this.title}}: </b>
+            <li>Price: ${{this.price}}</li>
+            <li>Stock: {{this.stock}}</li>
+            <li>Description: {{this.description}}</li>
+            <form method="post" action="http://localhost:8080/api/carts/64337d1b5d9fff4cef501c9a/products/{{this._id}}"
+            >
+            <button type="submit">Add to cart</button>
+            </form>
+            <br>
+        {{/each}}
+    </ul>
+
+    {{#if products.hasPrevPage}}
+        <a href="/products?page={{products.prevPage}}">Anterior</a>
+    {{/if}}
+
+    <span>Pagina: {{products.page}} de {{products.totalPages}}</span>
+
+    {{#if products.hasNextPage}}
+        <a href="/products?page={{products.nextPage}}">Siguiente</a>
+    {{/if}}
+
+    
+
+</div>

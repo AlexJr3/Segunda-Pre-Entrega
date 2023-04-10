@@ -6,15 +6,19 @@ class CartManager {
   }
 
   async getCarts() {
-    const carts = await cartModel.find().lean();
+    const carts = await cartModel.find().populate("products.product").lean();
 
     return carts;
   }
 
   async addCart(carts) {
-    const result = await cartModel.create(carts);
+    try {
+      const result = await cartModel.create(carts);
 
-    return result;
+      return result;
+    } catch (error) {
+      return [];
+    }
   }
 
   async getCartById(id) {
@@ -27,11 +31,16 @@ class CartManager {
   }
 
   async addProductToCart(cartId, productId) {
-    const cart = await cartModel.findById(cartId);
+    const cart = await cartModel.findById(cartId).populate("products.product");
+    const productIndex = await cart.products.find((el) => el._id === productId);
 
-    cart.products.push({ product: productId });
+    if (productIndex === -1) {
+      cart.products.push({ product: pid, quantity: 1 });
+    } else {
+      cart.products[productIndex].quantity += 1;
+    }
 
-    return cart.save();
+    return cart;
   }
 
   async deletedProduct(cId, pId) {
@@ -51,18 +60,23 @@ class CartManager {
     return addCart;
   }
 
-  async updateQuantity(cid, pid, quantity) {
+  async updateQuantity(cid, pid, reqQuantity) {
     const cart = await cartModel.findById(cid).populate("products.product");
 
-    const product = cart.porducts.find((p) => p.product === pid);
+    const add = reqQuantity ? reqQuantity : 1;
+    const productIndex = await cart.porducts.findIndex((p) => p._id === pid);
 
-    product.quantity = quantity;
+    if (productIndex === -1) {
+      cart.products.push({ product: pid, quantity: add });
+    } else {
+      cart.products[productIndex].quantity += add;
+    }
 
     return cart.save();
   }
 
   async deletedAll(cId) {
-    const deletedProducts = await cartModel.findOneAndDelete(
+    const deletedProducts = await cartModel.updateOne(
       { _id: cId },
       { $pull: { products: {} } }
     );
