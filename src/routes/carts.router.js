@@ -37,44 +37,42 @@ cartRouter.get("/:cid", async (req, res) => {
 cartRouter.post("/:cid/products/:pid", async (req, res) => {
   try {
     const { cid, pid } = req.params;
-    await cartManager.addProductToCart(cid, pid);
+    const cartUpdate = await cartManager.addProductToCart(cid, pid);
 
-    res
-      .status(200)
-      .send({ status: "ok", payload: await cartManager.getCartById(cid) });
+    res.status(200).send({ status: "ok", payload: cartUpdate });
   } catch (err) {
     res.status(400).send({ status: "error", payload: err.message });
   }
 });
 
-cartRouter.delete("/:cId/products/:pId", async (req, res) => {
-  const { cId, pId } = req.params;
-  const prod = await cartManager.prodDeleted(cId, pId);
+cartRouter.delete("/:cid/products/:pid", async (req, res) => {
+  const { cid, pid } = req.params;
+  const prod = await cartManager.prodDeleted(cid, pid);
 
   res.status(200).send({ status: "ok", payload: prod });
 });
 
-cartRouter.put("/:cId", async (req, res) => {
-  const { cId } = req.params;
-  const { products } = req.body;
+cartRouter.put("/:cid", async (req, res) => {
+  const { cid } = req.params;
+  const products = req.body;
 
-  const cart = await cartManager.updateCart(cId, products);
+  const cart = await cartManager.updateCart(cid, products);
 
   res.status(200).send({ status: "ok", payload: cart });
 });
 
-cartRouter.put("/:cId/products/:pId", async (req, res) => {
-  const { cId, pId } = req.params;
+cartRouter.put("/:cid/products/:pid", async (req, res) => {
+  const { cid, pid } = req.params;
   const { quantity } = req.body;
 
-  const newQuantity = await cartManager.updateQuantity(cId, pId, quantity);
+  const newQuantity = await cartManager.updateQuantity(cid, pid, quantity);
 
   res.status(200).send({ status: "ok", payload: newQuantity });
 });
 
-cartRouter.delete("/:cId", async (req, res) => {
-  const { cId } = req.params;
-  const deleteProduct = await cartManager.deletedAll(cId);
+cartRouter.delete("/:cid", async (req, res) => {
+  const { cid } = req.params;
+  const deleteProduct = await cartManager.deletedAll(cid);
 
   res.status(200).send({ status: "ok", payload: deleteProduct });
 });

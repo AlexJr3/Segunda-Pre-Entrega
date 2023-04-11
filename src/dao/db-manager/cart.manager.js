@@ -6,14 +6,14 @@ class CartManager {
   }
 
   async getCarts() {
-    const carts = await cartModel.find().populate("products.product").lean();
+    const carts = await cartModel.find().lean().populate("products.product");
 
     return carts;
   }
 
-  async addCart(carts) {
+  async addCart(data) {
     try {
-      const result = await cartModel.create(carts);
+      const result = await cartModel.create(data);
 
       return result;
     } catch (error) {
@@ -22,25 +22,24 @@ class CartManager {
   }
 
   async getCartById(id) {
-    const cart = await cartModel
-      .findById(id)
-      .populate("products.product")
-      .lean();
+    const cart = await cartModel.findById(id).populate("products.product");
 
     return cart;
   }
 
   async addProductToCart(cartId, productId) {
     const cart = await cartModel.findById(cartId).populate("products.product");
-    const productIndex = await cart.products.find((el) => el._id === productId);
+    const productIndex = await cart.products.findIndex(
+      (el) => el._id.toString() === productId.toString()
+    );
 
     if (productIndex === -1) {
-      cart.products.push({ product: pid, quantity: 1 });
+      cart.products.push({ product: productId, quantity: 1 });
     } else {
       cart.products[productIndex].quantity += 1;
     }
 
-    return cart;
+    return cart.save();
   }
 
   async deletedProduct(cId, pId) {
@@ -57,14 +56,16 @@ class CartManager {
       { $push: { products: { $each: data } } }
     );
 
-    return addCart;
+    return addCart.save();
   }
 
   async updateQuantity(cid, pid, reqQuantity) {
     const cart = await cartModel.findById(cid).populate("products.product");
 
     const add = reqQuantity ? reqQuantity : 1;
-    const productIndex = await cart.porducts.findIndex((p) => p._id === pid);
+    const productIndex = await cart.products.findIndex(
+      (p) => p._id.toString() === pid.toString()
+    );
 
     if (productIndex === -1) {
       cart.products.push({ product: pid, quantity: add });
