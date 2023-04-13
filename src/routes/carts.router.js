@@ -47,17 +47,16 @@ cartRouter.post("/:cid/products/:pid", async (req, res) => {
 
 cartRouter.delete("/:cid/products/:pid", async (req, res) => {
   const { cid, pid } = req.params;
-  const prod = await cartManager.prodDeleted(cid, pid);
+  const prod = await cartManager.deletedProduct(cid, pid);
 
   res.status(200).send({ status: "ok", payload: prod });
 });
 
 cartRouter.put("/:cid", async (req, res) => {
   const { cid } = req.params;
-  const products = req.body;
+  const data = req.body;
 
-  const cart = await cartManager.updateCart(cid, products);
-
+  const cart = await cartManager.updateCart(cid, data);
   res.status(200).send({ status: "ok", payload: cart });
 });
 
