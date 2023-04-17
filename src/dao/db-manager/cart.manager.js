@@ -37,10 +37,8 @@ class CartManager {
         (el) => el.product.toString() === productId
       );
 
-      console.log(findProduct);
-
       if (!findProduct) {
-        cart.products.push({ product: productId, quantity: 1 });
+        cart.products.push({ product: productId });
       } else {
         findProduct.quantity += 1;
       }
@@ -56,7 +54,7 @@ class CartManager {
       { _id: cId },
       { $pull: { products: { product: pId } } }
     );
-    return deleted.save();
+    return deleted;
   }
 
   async updateCart(cid, data) {

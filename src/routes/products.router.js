@@ -1,5 +1,6 @@
 import { Router, json } from "express";
 import { ProductManager } from "../dao/index.js";
+import { hasNextAndPrevPage } from "../utils.js";
 
 const router = new Router();
 router.use(json());
@@ -9,6 +10,8 @@ router.get("/", async (req, res) => {
   try {
     const { limit, page, sort, query } = req.query;
     const products = await productManager.getProducts(limit, page, sort, query);
+
+    hasNextAndPrevPage(products);
 
     res.status(200).send({ status: "ok", payload: products });
   } catch (error) {

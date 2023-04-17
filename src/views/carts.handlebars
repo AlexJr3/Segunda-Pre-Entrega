@@ -1,10 +1,16 @@
 <div>
     <h1>Cart</h1>
+    <b>Cart ID: {{cart._id}}</b>
     <ul>
-        {{#each cart}}
-            <li>Id:" {{this._id}}</li>
+        {{#each cart.products}}
+            <b><h3>{{product.title}}</h3></b>
+            <li>{{product.description}}</li>
+            <li>{{product.price}}</li>
+            <li>{{product.code}}</li>
+            <li>{{product.stock}}</li>
+            <li>{{product.status}}</li>
+            <li>{{product.category}}</li>
             <br>
-            <h2>Products</h2>
         {{/each}}
     </ul>
 </div>
