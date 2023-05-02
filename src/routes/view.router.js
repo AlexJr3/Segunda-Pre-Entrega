@@ -23,4 +23,13 @@ router.get("/carts/:cid", async (req, res) => {
   res.render("carts", { cart });
 });
 
+//AuthViews
+
+router.get("/", (req, res) => {
+  res.render("home");
+});
+
+router.get("/register", (req, res) => {
+  res.render("register");
+});
 export default router;
