@@ -5,7 +5,7 @@ export const createHash = (password) => {
   return hash;
 };
 
-export const compareHash = (userPassword, hash) => {
-  const verify = bcryp.compareSync(userPassword, hash);
+export const compareHash = (userPassword, user) => {
+  const verify = bcryp.compareSync(userPassword, user.password);
   return verify;
 };

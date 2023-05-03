@@ -43,60 +43,60 @@ export const localPassport = () => {
       }
     )
   );
-};
 
-passport.use(
-  "loginStrategy",
-  new localStrategy(
-    {
-      usernameField: "email",
-    },
-    async (username, password, done) => {
-      try {
-        const user = await userModel.findOne({ email: username });
-        if (!user) {
-          return done(null, false);
-        }
-
-        if (!compareHash(password, user.password)) {
-          return done(null, false);
-        }
-        return done(null, user);
-      } catch (error) {
-        return done(error);
-      }
-    }
-  )
-);
-
-///jwtStrategy
-
-const strategyjwt = () => {
   passport.use(
-    "current",
-    new jwtStrategy(
+    "loginStrategy",
+    new localStrategy(
       {
-        jwtFromRequest: ExtractJwt.fromExtractors([cookieExtractor]),
-        secretOrKey: securityToken,
+        usernameField: "email",
       },
-      async (jwt_payload, done) => {
+      async (username, password, done) => {
         try {
-          return done(null, jwt_payload);
+          const user = await userModel.findOne({ email: username });
+          if (!user) {
+            return done(null, false);
+          }
+
+          if (!compareHash(password, user)) {
+            return done(null, false);
+          }
+
+          return done(null, user);
         } catch (error) {
           return done(error);
         }
       }
     )
   );
+
+  ///jwtStrategy
+
+  const strategyjwt = () => {
+    passport.use(
+      "current",
+      new jwtStrategy(
+        {
+          jwtFromRequest: ExtractJwt.fromExtractors([cookieExtractor]),
+          secretOrKey: securityToken,
+        },
+        async (jwt_payload, done) => {
+          try {
+            return done(null, jwt_payload);
+          } catch (error) {
+            return done(error);
+          }
+        }
+      )
+    );
+  };
+
+  //Serializar el passport
+  passport.serializeUser((user, done) => {
+    done(null, user._id);
+  });
+
+  passport.deserializeUser(async (id, done) => {
+    const user = await userModel.findById(id);
+    return done(null, user);
+  });
 };
-
-//Serializar el passport
-
-passport.serializeUser((user, done) => {
-  done(null, user._id);
-});
-
-passport.deserializeUser(async (id, done) => {
-  const user = await userModel.findById(id);
-  return done(null, user);
-});

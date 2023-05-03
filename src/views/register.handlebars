@@ -1,13 +1,24 @@
-<form action="http://localhost:8080/api/auth/register" method="POST">
-    <input type="text" placeholder="Email@mail.com" name="email">
-    <br>
-    <input type="text" placeholder="Password" name="password">
-    <br>
+<h1>Register</h1>
+<a href="/">Home</a>
+<a href="/register">Sign Up</a>
+<a href="/login">Login</a>
+<a href="/products">Products</a>
+<a href="/cart">Cart</a>
+
+
+<form action="/api/auth/singup" method="post">
+   
     <input type="text" placeholder="First Name" name="firstName">
     <br>
     <input type="text" placeholder="Last Name" name="lastName">
     <br>
     <input type="number" placeholder="Age" name="age">
     <br>
+     <input type="text" placeholder="Email@mail.com" name="email">
+    <br>
+    <input type="text" placeholder="Password" name="password">
+      <br>
     <button type="submit">Sign up</button>
+  
+    
 </form>
