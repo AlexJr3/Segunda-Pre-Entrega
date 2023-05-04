@@ -14,7 +14,10 @@ const userSchema = mongoose.Schema({
     default: "user",
     enum: ["user", "admin"],
   },
-  cart: String,
+  cart: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "carts",
+  },
 });
 
 export const userModel = mongoose.model("users", userSchema);

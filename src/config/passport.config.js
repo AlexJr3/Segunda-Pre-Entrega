@@ -2,7 +2,7 @@ import passport from "passport";
 import localStrategy from "passport-local";
 import jwt from "passport-jwt";
 import { userModel } from "../dao/models/user.model.js";
-import { createHash, compareHash } from "./utils.config.js";
+import { createHash, compareHash, cookieExtractor } from "./utils.config.js";
 
 const securityToken = "claveSuperSegura";
 const jwtStrategy = jwt.Strategy;
@@ -44,6 +44,7 @@ export const localPassport = () => {
     )
   );
 
+  //login strategy
   passport.use(
     "loginStrategy",
     new localStrategy(
