@@ -1,36 +1,28 @@
 import { Router } from "express";
 import cookieParser from "cookie-parser";
-import passport from "passport";
-import jwt from "jsonwebtoken";
-import { authorize, authenticate } from "../middlewares/autenticate.js";
+import {
+  AuthController,
+  singUpController,
+  loginController,
+  currentAuthenticateController,
+  currentAuthorizeController,
+} from "../controller/auth.controller.js";
 
 const router = Router();
 router.use(cookieParser());
-const securityToken = "claveSuperSegura";
+const controller = new AuthController();
 
-router.post("/singup", passport.authenticate("singUpStrategy"), (req, res) => {
-  res.send("Registrado con exito");
-});
+router.post("/singup", singUpController, controller.singUpRedirectController);
 
-router.post("/login", passport.authenticate("loginStrategy"), (req, res) => {
-  const token = jwt.sign(
-    { email: req.user.email, role: req.user.role },
-    securityToken
-  );
-  res.cookie("token-cookie", token, { httpOnly: true }).redirect("/products");
-});
-
-router.get("/failure-page", (req, res) => {
-  res.send({ status: "error", message: new Error() });
-});
+router.post("/login", loginController, controller.loginRedirectController);
 
 router.get(
   "/current",
-  authenticate("current"),
-  authorize("admin"),
-  (req, res) => {
-    res.send("usuario autenticado, bienvenido", req.user.email);
-  }
+  currentAuthorizeController,
+  currentAuthenticateController,
+  controller.curretController
 );
+
+router.get("/failure-page", controller.failurePageController);
 
 export default router;
