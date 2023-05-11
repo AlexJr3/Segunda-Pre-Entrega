@@ -3,8 +3,9 @@ import localStrategy from "passport-local";
 import jwt from "passport-jwt";
 import { userModel } from "../dao/models/user.model.js";
 import { createHash, compareHash, cookieExtractor } from "./utils.config.js";
+import { config } from "./config.js";
 
-const securityToken = "claveSuperSegura";
+const securityToken = config.jwt.key;
 const jwtStrategy = jwt.Strategy;
 const ExtractJwt = jwt.ExtractJwt;
 

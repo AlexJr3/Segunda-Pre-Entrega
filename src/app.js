@@ -1,16 +1,19 @@
 import express from "express";
 import __dirname from "./utils.js";
-import productRouter from "./routes/products.router.js";
-import cartRouter from "./routes/carts.router.js";
-import viewsRouter from "./routes/view.router.js";
-import authRouter from "./routes/auth.router.js";
 import { engine } from "express-handlebars";
 import mongoose from "mongoose";
 import passport from "passport";
 import { localPassport } from "./config/passport.config.js";
 import path from "path";
+import { config } from "./config/config.js";
+import productRouter from "./routes/products.router.js";
+import cartRouter from "./routes/carts.router.js";
+import viewsRouter from "./routes/view.router.js";
+import authRouter from "./routes/auth.router.js";
 
 const app = express();
+const port = config.server.port;
+const mongoUlr = config.server.dbUrl;
 
 //Midlewares
 app.use(express.json());
@@ -34,14 +37,10 @@ app.set("views", path.join(__dirname + "/views"));
 
 //mongooseConnect
 
-mongoose
-  .connect(
-    "mongodb+srv://alexisjrbwork:blTyiBGV3yxMhFcb@codercluster.7y4c97s.mongodb.net/Segunda-Pre-Entrega?retryWrites=true&w=majority"
-  )
-  .then((conn) => {
-    console.log("Connected to DB");
-  });
+mongoose.connect(mongoUlr).then((conn) => {
+  console.log("Connected to DB");
+});
 
-app.listen(8080, (req, res) => {
-  console.log("Server listening on port 8080");
+app.listen(port, (req, res) => {
+  console.log(`Server listening on port: ${port}`);
 });

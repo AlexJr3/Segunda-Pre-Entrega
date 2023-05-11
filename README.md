@@ -1,9 +1,15 @@
-Hola Lautaro, estoy poniendome al dia con el material y creo que he avanzado basntate en cuanto a passport, estos son los puntos que me faltan para termianr el desafio:
+#Consigna
 
-# (Sólo para jwt) desarrollar una estrategia “current” para extraer la cookie que contiene el token para obtener el usuario asociado a dicho token, en caso de tener el token, devolver al usuario asociado al token, caso contrario devolver un error de passport, utilizar un extractor de cookie.
+Con base en las clases previamente vistas, realizar los cambios necesarios en tu proyecto para que se base en un modelo de capas.
 
-# Agregar al router /api/sessions/ la ruta /current, la cual utilizará el modelo de sesión que estés utilizando, para poder devolver en una respuesta el usuario actual.
+#Aspectos a incluir
 
-Pienso que 1-2 dias maximo estara listo, si me puedes dar tiempo para hacer la reentrega estaria genial, ya que me gustaria que me dieras el feedback del desafio completado, sino se puede. No hay problema.
+El proyecto debe contar con capas de routing, controlador, dao, con nuestras vistas bien separadas y con las responsabilidades correctamente delegadas.
 
-Saludos
+#Aspectos a incluir
+
+Además, mover del proyecto todas las partes importantes y comprometedoras en un archivo .env para poder leerlo bajo variables de entorno en un archivo config.js
+
+#Formato
+
+Link al repositorio de Github para poder clonar, además. adjunto el archivo .env para poder relacionar las variables de entorno.
